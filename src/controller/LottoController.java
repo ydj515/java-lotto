@@ -9,6 +9,7 @@ import view.InputView;
 import view.OutputView;
 
 import java.util.*;
+import java.util.stream.*;
 
 public class LottoController {
 
@@ -22,16 +23,18 @@ public class LottoController {
 
 		// 수동으로 구매할 티켓 갯수
 		int handMadeTicketNumber = InputView.inputHandMadeLottoTicketsNumber();
+
+		// 자동으로 구매할 티켓 갯수
 		int computerMadeTicketNumber = totalTicketNumber - handMadeTicketNumber;
 
 		List<LottoTicket> handMadeLottoTickets = new ArrayList<>();
 
 		// 수동으로 구매하는 티켓 입력
 		InputView.inputHandMadeTicketMessage();
-		for (int i = 0; i < handMadeTicketNumber; i++) {
-			handMadeLottoTickets.add(
-					new LottoTicket(ConvertStringToIntegerList.conterStringToInteger(InputView.inputHandMadeTicket())));
-		}
+
+		IntStream.range(0, handMadeTicketNumber).forEach(i -> {
+			handMadeLottoTickets.add(new LottoTicket(ConvertStringToIntegerList.conterStringToInteger(InputView.inputHandMadeTicket())));
+		});
 
 		// ~개를 구매했습니다
 		OutputView.printHowManyTickets(handMadeTicketNumber, computerMadeTicketNumber);
@@ -42,8 +45,9 @@ public class LottoController {
 		OutputView.printLottoTicket(lottoTickets);
 
 		// 지난주 당첨번호 입력
-		List<Integer> lastWeekWinngNumbers = ConvertStringToIntegerList
-				.conterStringToInteger(InputView.inputLastWeekWinningNumbers());
+		List<Integer> lastWeekWinngNumbers = ConvertStringToIntegerList.conterStringToInteger(InputView.inputLastWeekWinningNumbers());
+
+		// 보너스볼 추가
 		lastWeekWinngNumbers.add(InputView.inputBonusBall());
 
 		Result result = new Result(lottoTickets, lastWeekWinngNumbers);
